@@ -67,11 +67,12 @@ def compute_relative_frequency(df, lemma):
     return (count / total) if total > 0 else 0.0
 
 
-def compute_readability(text):
+def compute_readability(text, lang="fr"):
     """
     Compute Flesch Reading Ease as a French-adapted readability score.
     """
     # Using English formula as proxy; for French consider Douma variant manually
+    textstat.set_lang(lang)
     return textstat.flesch_reading_ease(text)
 
 
