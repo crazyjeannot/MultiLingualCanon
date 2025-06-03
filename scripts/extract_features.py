@@ -59,6 +59,22 @@ def compute_passive_active_ratio(df):
     return (passive / active) if active > 0 else 0.0
 
 
+def compute_dk_passive_active_ratio(df):
+    """
+    Approximate passive/active verb ratio via morphological features in Danish.
+    Passive = verbs with 'Voice=Pass' in token_morph
+    Active = other verbs (excluding passive ones)
+    """
+    morph = df['token_morph'].astype(str)
+    is_verb = df['POS_tag'].isin(['AUX', 'VERB'])
+
+    passive = morph[is_verb].str.contains('Voice=Pass').sum()
+    total = is_verb.sum()
+    active = total - passive
+
+    return (passive / active) if active > 0 else 0.0
+
+
 def compute_relative_frequency(df, lemma):
     """
     Relative frequency of a given lemma in the document.
