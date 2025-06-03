@@ -5,6 +5,8 @@ import pandas as pd
 import textstat
 from tqdm import tqdm
 import re
+import random
+import numpy as np
 
 
 def compute_msttr(tokens, segment_size=100):
@@ -45,6 +47,33 @@ def compute_compressibility(text):
     data = text.encode('utf-8')
     compressed = bz2.compress(data)
     return len(data) / len(compressed) if len(compressed) > 0 else 0.0
+
+
+def compute_normalized_compressibility(text, sample_size=500, n_samples=3):
+    """
+    Compute compressibility as the average of n_samples taken from non-overlapping
+    500-word chunks. Returns the mean compressibility of these chunks.
+    """
+    words = text.split()
+    total_words = len(words)
+    chunk_size = sample_size
+
+    if total_words < chunk_size * n_samples:
+        return np.nan  # or 0.0 if you prefer a default fallback
+
+    # Pick non-overlapping random start indices
+    max_start = total_words - chunk_size
+    starts = random.sample(range(0, max_start, chunk_size), n_samples)
+
+    compressibilities = []
+    for start in starts:
+        chunk = " ".join(words[start:start + chunk_size])
+        data = chunk.encode('utf-8')
+        compressed = bz2.compress(data)
+        ratio = len(data) / len(compressed) if len(compressed) > 0 else 0.0
+        compressibilities.append(ratio)
+
+    return np.mean(compressibilities)
 
 
 def compute_passive_active_ratio(df):
