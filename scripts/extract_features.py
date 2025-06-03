@@ -4,6 +4,7 @@ import bz2
 import pandas as pd
 import textstat
 from tqdm import tqdm
+import re
 
 
 def compute_msttr(tokens, segment_size=100):
@@ -76,6 +77,21 @@ def compute_readability(text, lang="fr"):
     return textstat.flesch_reading_ease(text)
 
 
+# --- danish readability function ---
+def compute_dk_readability(text):
+    sentences = re.split(r'[.!?]+', text)
+    sentences = [s.strip() for s in sentences if s.strip()]
+    n_sentences = len(sentences) if sentences else 1
+
+    words = re.findall(r'\b\w+\b', text)
+    n_words = len(words) if words else 1
+
+    n_long_words = sum(1 for w in words if len(w) > 6)
+
+    lix_score = (n_words / n_sentences) + (n_long_words * 100) / n_words
+    return lix_score
+
+
 def compute_mean_sentence_length(df):
     """
     Compute mean sentence length in tokens (excluding punctuation).
@@ -92,7 +108,7 @@ def compute_mean_word_length(df):
     """
     words = df[df['POS_tag'] != 'PUNCT']['word']
     lengths = words.str.len().values
-n    return lengths.mean() if len(lengths) > 0 else 0.0
+    return lengths.mean() if len(lengths) > 0 else 0.0
 
 
 def compute_noun_word_ratio(df):
@@ -131,7 +147,8 @@ def extract_features_for_file(filepath):
         'Flesch Reading Ease': compute_readability(text),
         'Mean sentence length': compute_mean_sentence_length(df),
         'Mean word length': compute_mean_word_length(df),
-        'Noun/Word ratio': compute_noun_word_ratio(df)
+        'Noun/Word ratio': compute_noun_word_ratio(df),
+        'dk_readability': compute_dk_readability(text)
     }
 
     return feats
