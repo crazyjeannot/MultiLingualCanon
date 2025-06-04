@@ -1,7 +1,7 @@
 
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 
 # function from scripts/normalize_df.py
@@ -35,7 +35,7 @@ def normalize_dataframe(df, id_col, output_file):
 
 # function to normalize based on features
 def standardize_features(df, id_col, output_file):
-    scaler = StandardScaler()
+    scaler = MinMaxScaler()
 
     # Identify and extract numeric columns (excluding the ID)
     numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
@@ -47,7 +47,14 @@ def standardize_features(df, id_col, output_file):
 
     # Scale numeric data
     scaled_values = scaler.fit_transform(df[numeric_cols])
-    normalized_df = pd.DataFrame(scaled_values, columns=numeric_cols)
+
+    # Row-normalize (L2 norm) each row vector
+    norms = np.linalg.norm(scaled_values, axis=1, keepdims=True)
+    # Avoid division by zero
+    norms[norms == 0] = 1
+    row_normalized = scaled_values / norms
+
+    normalized_df = pd.DataFrame(row_normalized, columns=numeric_cols)
 
     # Add ID column
     normalized_df.insert(0, id_col, df[id_col].values)
