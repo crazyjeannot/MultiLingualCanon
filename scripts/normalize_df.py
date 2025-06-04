@@ -26,3 +26,4 @@ else:
     normalized_df = pd.DataFrame(normalized_data, columns=numeric_data.columns)
     normalized_df.to_csv(NORMALIZED_FILE_NAME, index=True)
     print(f"Normalized data saved to {NORMALIZED_FILE_NAME}")
+
