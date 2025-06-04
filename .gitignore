@@ -2,3 +2,4 @@ dk_computation/
 # Ignore Python cache files
 __pycache__/
 *.py[cod]
+.DS_Store
