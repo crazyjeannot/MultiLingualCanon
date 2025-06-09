@@ -136,6 +136,17 @@ def compute_dk_readability(text):
     lix_score = (n_words / n_sentences) + (n_long_words * 100) / n_words
     return lix_score
 
+def compute_de_readability(text):
+    """
+    Compute the Wiener Sachtextformel as a readability score.
+    """
+    return textstat.wiener_sachtextformel(text, 1)
+
+def compute_en_readability(text):
+    """
+    Compute Flesch Reading Ease as a French-adapted readability score.
+    """
+    return textstat.flesch_reading_ease(text)
 
 def compute_mean_sentence_length(df):
     """
