@@ -1,0 +1,3 @@
+title,indegree,pagerank,betweenness,closeness,canonisation_score,louvain_cluster,leiden_cluster
+1871_Bergsoee_ISabinerbjergene_1,0.0,0.0004598144833009,0.0,0.0,0.179053306790533,20,19
+1870_Friis_MagnusHeinesen,0.9817686896376744,0.0008505811271982,0.0,0.0011729613974165,0.0,20,19
