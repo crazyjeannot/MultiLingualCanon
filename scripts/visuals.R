@@ -26,7 +26,7 @@ library(zoo)
 
 # Scatterplots ----------------------------------------------------------------#
 
-setwd("C:\\Users\\Brottrager\\Documents\\Projects\\MultilingualCanon\\networkMetrics_time_sensitive_3nn")
+setwd(".\\MultilingualCanon\\networkMetrics_time_sensitive_3nn")
 
 files <- dir(pattern = "network_metrics.+.csv")
 
@@ -513,7 +513,7 @@ ggsave("outlier_texts//allOutliersDist.png", width = 10, height = 6, dpi = 360)
 
 # rho per cluster -------------------------------------------------------------#
 
-setwd("C:\\Users\\Brottrager\\Documents\\Projects\\MultilingualCanon\\clusterCorrelationResults_time_sensitive_3nn")
+setwd(".\\MultilingualCanon\\clusterCorrelationResults_time_sensitive_3nn")
 
 files <- dir(pattern = "louvain_cluster.+.csv")
 
